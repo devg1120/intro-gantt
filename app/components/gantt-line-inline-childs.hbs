@@ -1,0 +1,31 @@
+INLINE-CHILD
+{{ @project.jobs }}
+      {{#each @project.jobs as |job|}}
+         <li> {{ job.title  }} </li>
+            <span>
+              <svg width="12px" height="12px"><circle fill={{job.color}} cx="5" cy="6" r="5" width="9" height="9"></circle></svg>   
+              {{job.title}}
+            </span>
+
+      {{/each}}
+<!--
+      {{#each @project.childs as |job|}}
+JOB
+        {{! child lines}}
+        {{#line.childLine dateStart=job.dateStart dateEnd=job.dateEnd isEditable=true
+                          color=job.color onDateChange=(action "datesChanged" job) as |childLine|}}
+
+          {{! more complex title inner}}
+          {{#childLine.title}}
+            <span>
+              <svg width="12px" height="12px"><circle fill={{job.color}} cx="5" cy="6" r="5" width="9" height="9"></circle></svg>
+              {{job.title}}
+            </span>
+          {{/childLine.title}}
+
+          {{! add something to the bar content}}
+          {{#childLine.barContent}}{{job.title}}{{/childLine.barContent}}
+
+        {{/line.childLine}}
+      {{/each}}
+-->
