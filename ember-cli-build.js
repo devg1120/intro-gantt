@@ -8,11 +8,14 @@ module.exports = function (defaults) {
       bootstrapVersion: 5,
       importBootstrapCSS: true
     }
-  //,
-  //  sassOptions: {
-  //    includePaths: ['/app/styles/gantt']
-  //    extension: 'scss'
-  //  }
+  ,
+    outputPaths: {
+      app: {
+        css: {
+          'ember-gantt': '/assets/ember-gantt.css'
+        }
+      }
+    }
   });
 
   // Use `app.import` to add additional libraries to the generated

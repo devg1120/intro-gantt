@@ -7,6 +7,9 @@ import {alias} from '@ember/object/computed';
 import {htmlSafe} from '@ember/template';
 import {isEqual,isNone} from '@ember/utils';
 import {bind} from '@ember/runloop';
+import {action} from '@ember/object';
+
+import layout from './gantt-timeline';
 
 import dateUtil from '../utils/date-util';
 //import Component from '@ember/component';
@@ -37,12 +40,12 @@ export default class GanttTimelineComponent extends Component {
   @computed('dayWidth')
   get dayWidthPx() {
     return htmlSafe(`${get(this, 'dayWidth')}px`);
-  }
+  };
   @computed('dayWidth')
   get cwWidthPx() {
     let width = get(this, 'dayWidth')*7;
     return htmlSafe(`${width}px`);
-  }
+  };
 
   // sticky header
   headerElement= null;
@@ -63,7 +66,26 @@ export default class GanttTimelineComponent extends Component {
     this.chart = args.chart;
     this._handleDocScroll = bind(this, this.checkSticky);
 
+  
   }
+
+  @action
+  registerListener(element) {
+
+    //set(this, 'headerElement', this.element.querySelector('.gantt-chart-header'));
+    set(this, 'headerElement', document.querySelector('.gantt-chart-header'));
+
+    // init sticky
+    if (!isNone(get(this, 'stickyOffset'))) {
+      element.addEventListener('scroll', this._handleDocScroll);
+    }
+
+    // init timeline scale
+    if (get(this, 'autoTimeline')) {
+      this.evaluateTimlineElements();
+    }
+  }
+
 
 /*
   didInsertElement() {
