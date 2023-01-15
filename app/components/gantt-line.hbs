@@ -1,17 +1,63 @@
+{{yield}}
 
 <!--
-GANTT-LINE
-<hr>
+<div class="gantt-line">
 
-  <li>{{@dateStart}}</li>
-  <li>{{@dateEnd}}</li>
-  
-  <li>{{@title}}</li>
-<hr>
+  {{! title - from title attribute or }}
+  {{#if @title}}
+    <div class="gantt-line-title">
+      <span>{{@title}}</span>
+    </div>
+  {{else}}
+    {{yield
+      (hash
+        title=(component "gantt-line-title" line=this)
+      )}}
+  {{/if}}
+
+  {{! timeline }}
+  <div class="gantt-line-timeline">
+
+    {{! bar }}
+    <div class="gantt-line-bar {{if @isEditable 'gantt-line-bar-editable'}}" style={{barStyle}} title={{barTitle}}>
+
+
+      {{yield
+        (hash
+          inlineChilds=(component "gantt-line-inline-childs" parentLine=this chart=@chart)
+          barContent=(component "gantt-line-barcontent" line=this)
+        )
+      }}
+
+      {{#if @isEditable}}
+        <div class="bar-resize-l"></div>
+        <div class="bar-resize-r"></div>
+      {{/if}}
+
+    </div>
+
+
+    {{! months }}
+    {{!--#each chart.timelineMonths as |month|}}
+      <div class="gantt-timeline-month">
+        {{#each month.days as |day|}}
+          <div class="gantt-timeline-day {{if day.isWeekend 'gantt-timeline-day-weekend'}}"></div>
+        {{/each}}
+      </div>
+    {{/each--}}
+
+  </div>
+</div>
+
+
+
+-
+{{! child lines }}
+<div class="gantt-line-childs">
+	{{yield
+	  (hash
+	    childLine=(component "gantt-line" chart=@chart  parentLine=this)
+	  )
+	}}
+</div>
 -->
-
-<GanttLineTitle @project={{@project}}>
-</GanttLineTitle>
-
-<GanttLineInlineChilds @project={{@project}}>
-</GanttLineInlineChilds>

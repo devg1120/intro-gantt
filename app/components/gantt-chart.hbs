@@ -1,5 +1,4 @@
 <div class="gantt-chart-innner">
-  GANTT-CHART-START
 
   <hr>
   <li>{{@dayWidth}}</li>
@@ -14,16 +13,93 @@
          @showToday={{@showToday}} @chart={{this}}
   >
   </GanttTimeline>
+
+  <div class="gantt-titles-background"></div>
+  <div class="gantt-lines">
   {{#each this.projects as |project|}}
-      <li>{{project.title}} </li>
+
        <GanttLine  @dateStart={{project.minStartDate}}
                    @dateEnd={{project.maxEndDate}}
 		   @inlineChilds={{project.jobs}}
 		   @title={{project.title}}
 		   @project={{project}}
 		   as |line|>
+
+	      <GanttLineTitle @project={{@project}}>
+                <span><a href="" {{action 'collapse' project}}>{{project.title}}</a></span>
+              </GanttLineTitle>
+	    
+              <GanttLineInlineChilds @childLines={{@project.jobs}} >
+              </GanttLineInlineChilds >
+
+
+              <BsCollapse @collapsed=@project.collapsed>
+
+                {{#unless project.collapsed}}
+                  {{#each project.jobs as |job|}}
+                     <li>JOB</li>
+	
+                    {{! child lines}}
+                    {{#line.childLine dateStart=job.dateStart dateEnd=job.dateEnd isEditable=true
+                                      color=job.color onDateChange=(action "datesChanged" job) as |childLine|}}
+        
+                      {{! more complex title inner}}
+                      {{#childLine.title}}
+                        <span>
+                          <svg width="12px" height="12px"><circle fill={{job.color}} cx="5" cy="6" r="5" width="9" height="9"></circle></svg>
+                          {{job.title}}
+                        </span>
+                      {{/childLine.title}}
+        
+                      {{! add something to the bar content}}
+                      {{#childLine.barContent}}{{job.title}}{{/childLine.barContent}}
+        
+                    {{/line.childLine}}
+	   
+	    
+                  {{/each}}
+                {{/unless}}
+  
+              </BsCollapse>
+   
        </GanttLine>
+	      
+<!--
+      {{#chart.line dateStart=project.minStartDate dateEnd=project.maxEndDate inlineChilds=project.jobs as |line|}}
+              {{! collapse childs }}
+              {{#line.title}}
+                <span><a href="" {{action 'collapse' project}}>{{project.title}}</a></span>
+              {{/line.title}}
+        
+              {{! inline childs - show child-segments inline in the bar (childs need {dateStart, dateEnd, color})}}
+              {{line.inlineChilds childLines=project.jobs }}
+        
+              {{! child line for each job in project }}
+              {{#bs-collapse collapsed=project.collapsed}}
+                {{#unless project.collapsed}}
+                  {{#each project.jobs as |job|}}
+        
+                    {{! child lines}}
+                    {{#line.childLine dateStart=job.dateStart dateEnd=job.dateEnd isEditable=true
+                                      color=job.color onDateChange=(action "datesChanged" job) as |childLine|}}
+        
+                      {{! more complex title inner}}
+                      {{#childLine.title}}
+                        <span>
+                          <svg width="12px" height="12px"><circle fill={{job.color}} cx="5" cy="6" r="5" width="9" height="9"></circle></svg>
+                          {{job.title}}
+                        </span>
+                      {{/childLine.title}}
+        
+                      {{! add something to the bar content}}
+                      {{#childLine.barContent}}{{job.title}}{{/childLine.barContent}}
+        
+                    {{/line.childLine}}
+                  {{/each}}
+                {{/unless}}
+              {{/bs-collapse}}
+         {{/chart.line}}
+	 -->
   {{/each}}
-  <hr>
-   GANTT-CHART-END
+</div>
 </div>
